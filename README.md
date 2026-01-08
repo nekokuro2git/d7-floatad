@@ -1,138 +1,138 @@
-# Dubai7 浮動廣告外掛
+# Dubai7 Floating Ad Plugin
 
-一個專為 WordPress 設計的浮動廣告外掛，支援多種內容類型和設備選擇。
+A floating ad plugin designed for WordPress, supporting multiple content types and device selection.
 
-## 🚀 功能特色
+## 🚀 Features
 
-- **多種內容類型**：支援圖片、動態 SVG、Lottie 動畫和 HTML 文字
-- **設備選擇**：可選擇在行動裝置、平板或桌機上顯示廣告
-- **可關閉設計**：使用者可關閉廣告，24 小時內不會再顯示
-- **彈性定位**：可自訂廣告的水平和垂直位置
-- **安全驗證**：所有輸入都經過安全驗證，防止 XSS 攻擊
-- **模組化設計**：使用物件導向程式設計，易於維護和擴展
+- **Multiple Content Types**: Supports images, dynamic SVG, Lottie animations, and HTML text
+- **Device Selection**: Choose to display ads on mobile devices, tablets, or desktops
+- **Dismissible Design**: Users can close ads, and they won't appear again for 24 hours
+- **Flexible Positioning**: Customize horizontal and vertical ad positions
+- **Security Validation**: All inputs are validated to prevent XSS attacks
+- **Modular Design**: Uses object-oriented programming for easy maintenance and extension
 
-## 📁 檔案結構
+## 📁 File Structure
 
 ```
 d7-floatad/
-├── d7-floatad.php              # 主檔案（外掛入口點）
-├── includes/                   # 核心類別檔案
-│   ├── class-d7-floating-ad.php           # 主要外掛類別
-│   ├── class-d7-floating-ad-utils.php     # 工具類別
-│   ├── class-d7-floating-ad-admin.php     # 管理介面類別
-│   └── class-d7-floating-ad-display.php   # 前端顯示類別
+├── d7-floatad.php              # Main file (plugin entry point)
+├── includes/                   # Core class files
+│   ├── class-d7-floating-ad.php           # Main plugin class
+│   ├── class-d7-floating-ad-utils.php     # Utility class
+│   ├── class-d7-floating-ad-admin.php     # Admin interface class
+│   └── class-d7-floating-ad-display.php   # Frontend display class
 ├── js/
-│   └── media-uploader.js       # 媒體上傳器 JavaScript
-└── README.md                   # 說明文件
+│   └── media-uploader.js       # Media uploader JavaScript
+└── README.md                   # Documentation
 ```
 
-## 🛠️ 安裝方式
+## 🛠️ Installation
 
-1. 將外掛資料夾上傳到 `/wp-content/plugins/` 目錄
-2. 在 WordPress 後台啟用外掛
-3. 前往「設定」→「浮動廣告」進行設定
+1. Upload the plugin folder to the `/wp-content/plugins/` directory
+2. Activate the plugin in WordPress admin
+3. Go to **Settings** → **Floating Ad** to configure
 
-## ⚙️ 設定說明
+## ⚙️ Configuration
 
-### 基本設定
-- **啟用浮動廣告**：開啟或關閉外掛功能
-- **顯示設備**：選擇要在哪些設備上顯示廣告（可多選）
-  - 行動裝置（手機）
-  - 平板裝置
-  - 桌機
-- **內容類型**：選擇要顯示的內容類型
-- **內容網址**：圖片、SVG 或 Lottie JSON 的網址
-- **HTML 內容**：自訂 HTML 文字內容
-- **連結網址**：點擊廣告後要前往的網址
+### Basic Settings
+- **Enable Floating Ad**: Turn the plugin on or off
+- **Display Devices**: Choose which devices to display ads on (multiple selection available)
+  - Mobile devices (phones)
+  - Tablets
+  - Desktop
+- **Content Type**: Choose the content type to display
+- **Content URL**: URL of image, SVG, or Lottie JSON
+- **HTML Content**: Custom HTML text content
+- **Link URL**: URL to navigate to when the ad is clicked
 
-### 顯示設定
-- **顯示寬度**：廣告的寬度（像素）
-- **顯示高度**：廣告的高度（像素）
-- **水平位置**：CSS 定位屬性（如：`right: 15px;`）
-- **垂直位置**：CSS 定位屬性（如：`bottom: 15px;`）
+### Display Settings
+- **Display Width**: Ad width (in pixels)
+- **Display Height**: Ad height (in pixels)
+- **Horizontal Position**: CSS positioning property (e.g., `right: 15px;`)
+- **Vertical Position**: CSS positioning property (e.g., `bottom: 15px;`)
 
-## 🔧 開發者資訊
+## 🔧 Developer Information
 
-### 類別架構
+### Class Architecture
 
-#### D7_Floating_Ad（主要類別）
-- 負責外掛的初始化和協調
-- 管理腳本載入和勾點註冊
-- 提供單例模式確保唯一實例
+#### D7_Floating_Ad (Main Class)
+- Handles plugin initialization and coordination
+- Manages script loading and hook registration
+- Provides singleton pattern to ensure unique instance
 
-#### D7_Floating_Ad_Utils（工具類別）
-- 提供驗證和清理函數
-- 處理 CSS 屬性驗證
-- 管理預設設定和錯誤日誌
+#### D7_Floating_Ad_Utils (Utility Class)
+- Provides validation and sanitization functions
+- Handles CSS property validation
+- Manages default settings and error logging
 
-#### D7_Floating_Ad_Admin（管理介面類別）
-- 處理後台設定頁面
-- 管理設定欄位的渲染
-- 處理設定的儲存和驗證
+#### D7_Floating_Ad_Admin (Admin Interface Class)
+- Handles backend settings page
+- Manages settings field rendering
+- Handles settings storage and validation
 
-#### D7_Floating_Ad_Display（前端顯示類別）
-- 負責廣告的前端渲染
-- 處理不同內容類型的生成
-- 管理 JavaScript 功能
+#### D7_Floating_Ad_Display (Frontend Display Class)
+- Responsible for frontend ad rendering
+- Handles different content type generation
+- Manages JavaScript functionality
 
-### 擴展方式
+### Extending the Plugin
 
-#### 添加新的內容類型
-1. 在 `D7_Floating_Ad_Utils::sanitize_settings()` 中添加新類型
-2. 在 `D7_Floating_Ad_Admin::render_ad_type_field()` 中添加選項
-3. 在 `D7_Floating_Ad_Display::generate_content()` 中添加處理邏輯
+#### Adding New Content Types
+1. Add the new type in `D7_Floating_Ad_Utils::sanitize_settings()`
+2. Add the option in `D7_Floating_Ad_Admin::render_ad_type_field()`
+3. Add processing logic in `D7_Floating_Ad_Display::generate_content()`
 
-#### 添加新的設定欄位
-1. 在 `D7_Floating_Ad_Admin::add_settings_fields()` 中定義欄位
-2. 創建對應的渲染方法
-3. 在 `D7_Floating_Ad_Utils::sanitize_settings()` 中添加驗證
+#### Adding New Settings Fields
+1. Define the field in `D7_Floating_Ad_Admin::add_settings_fields()`
+2. Create the corresponding rendering method
+3. Add validation in `D7_Floating_Ad_Utils::sanitize_settings()`
 
-## 🎯 AI Coding 優勢
+## 🎯 AI Coding Advantages
 
-這個模組化設計對 AI 編程有以下優勢：
+This modular design offers the following advantages for AI programming:
 
-### 1. **清晰的職責分離**
-- 每個類別都有明確的功能範圍
-- AI 可以更容易理解每個部分的用途
+### 1. **Clear Separation of Concerns**
+- Each class has a clear functional scope
+- AI can more easily understand the purpose of each part
 
-### 2. **易於維護和擴展**
-- 修改特定功能時，只需要關注對應的類別
-- 新增功能時，可以遵循現有的模式
+### 2. **Easy Maintenance and Extension**
+- When modifying specific features, only focus on the corresponding class
+- When adding new features, follow existing patterns
 
-### 3. **更好的程式碼重用**
-- 工具函數可以在多個地方重複使用
-- 減少重複程式碼，提高效率
+### 3. **Better Code Reusability**
+- Utility functions can be reused in multiple places
+- Reduces code duplication and improves efficiency
 
-### 4. **簡化的主檔案**
-- 主檔案只有 70 行，邏輯清晰
-- AI 可以快速理解外掛的整體結構
+### 4. **Simplified Main File**
+- Main file is only 70 lines with clear logic
+- AI can quickly understand the overall plugin structure
 
-## 📝 版本歷史
+## 📝 Version History
 
 ### v1.3.0
-- 新增設備選擇功能：可選擇在行動裝置、平板或桌機上顯示廣告
-- 改善設備檢測邏輯，更精確地區分手機、平板和桌機
-- 更新前端腳本載入邏輯，根據設備選擇載入 Lottie 等腳本
+- Added device selection feature: Choose to display ads on mobile devices, tablets, or desktops
+- Improved device detection logic for more accurate distinction between phones, tablets, and desktops
+- Updated frontend script loading logic to load Lottie and other scripts based on device selection
 
 ### v1.2.0
-- 重構為模組化架構
-- 改善程式碼組織和可維護性
-- 增強安全性驗證
-- 添加更好的錯誤處理
+- Refactored to modular architecture
+- Improved code organization and maintainability
+- Enhanced security validation
+- Added better error handling
 
 ### v1.1.0
-- 添加啟用/停用功能
-- 改善 Cookie 設定
-- 增強 JavaScript 錯誤處理
+- Added enable/disable feature
+- Improved Cookie settings
+- Enhanced JavaScript error handling
 
 ### v1.0.0
-- 初始版本
-- 基本浮動廣告功能
+- Initial version
+- Basic floating ad functionality
 
-## 🤝 貢獻
+## 🤝 Contributing
 
-歡迎提交 Issue 和 Pull Request 來改善這個外掛。
+Welcome to submit Issues and Pull Requests to improve this plugin.
 
-## 📄 授權
+## 📄 License
 
-此專案採用 MIT 授權條款。
+This project is licensed under the MIT License.
