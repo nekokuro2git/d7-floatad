@@ -72,6 +72,7 @@ class D7_Floating_Ad_Utils {
     public static function get_default_settings() {
         return array(
             'enabled' => true,
+            'display_devices' => array('mobile'), // 預設只顯示在行動裝置
             'ad_type' => 'image',
             'image_url' => '',
             'html_content' => '',
@@ -94,6 +95,21 @@ class D7_Floating_Ad_Utils {
         
         // 啟用狀態
         $sanitized['enabled'] = isset($settings['enabled']) ? (bool) $settings['enabled'] : true;
+        
+        // 顯示設備（多選）
+        $allowed_devices = array('mobile', 'tablet', 'desktop');
+        $sanitized['display_devices'] = array();
+        if (isset($settings['display_devices']) && is_array($settings['display_devices'])) {
+            foreach ($settings['display_devices'] as $device) {
+                if (in_array($device, $allowed_devices)) {
+                    $sanitized['display_devices'][] = $device;
+                }
+            }
+        }
+        // 如果沒有選擇任何設備，預設為行動裝置
+        if (empty($sanitized['display_devices'])) {
+            $sanitized['display_devices'] = array('mobile');
+        }
         
         // 廣告類型
         $allowed_types = array('image', 'dynamic_svg', 'lottie', 'html');
@@ -125,22 +141,53 @@ class D7_Floating_Ad_Utils {
     }
     
     /**
-     * 檢查是否應該顯示廣告
+     * 檢測當前設備類型
      * 
-     * @return bool 是否應該顯示
+     * @return string 設備類型：mobile, tablet, desktop
      */
-    public static function should_display_ad() {
-        // 檢查是否為行動裝置
-        if (!wp_is_mobile()) {
-            return false;
+    public static function detect_device_type() {
+        // 檢查 User Agent
+        $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower($_SERVER['HTTP_USER_AGENT']) : '';
+        
+        // 檢測平板裝置
+        $tablet_patterns = array('ipad', 'tablet', 'playbook', 'kindle', 'silk', 'gt-p', 'gt-n', 'sgh-t', 'nexus 7', 'nexus 10', 'touchpad', 'xoom');
+        foreach ($tablet_patterns as $pattern) {
+            if (strpos($user_agent, $pattern) !== false) {
+                return 'tablet';
+            }
         }
         
+        // 檢測行動裝置
+        if (wp_is_mobile()) {
+            return 'mobile';
+        }
+        
+        // 其他情況視為桌機
+        return 'desktop';
+    }
+    
+    /**
+     * 檢查是否應該顯示廣告
+     * 
+     * @param array $display_devices 允許顯示的設備類型陣列
+     * @return bool 是否應該顯示
+     */
+    public static function should_display_ad($display_devices = array('mobile')) {
         // 檢查是否已關閉
         if (isset($_COOKIE['d7news_floating_ad_closed'])) {
             return false;
         }
         
-        return true;
+        // 如果沒有指定設備，預設不顯示
+        if (empty($display_devices) || !is_array($display_devices)) {
+            return false;
+        }
+        
+        // 檢測當前設備類型
+        $current_device = self::detect_device_type();
+        
+        // 檢查當前設備是否在允許的設備列表中
+        return in_array($current_device, $display_devices);
     }
     
     /**

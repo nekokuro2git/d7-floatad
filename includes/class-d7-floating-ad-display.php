@@ -29,16 +29,21 @@ class D7_Floating_Ad_Display {
      * 渲染廣告
      */
     public function render() {
-        // 檢查是否應該顯示廣告
-        if (!D7_Floating_Ad_Utils::should_display_ad()) {
-            return;
-        }
-
         $options = get_option($this->option_name);
         
         // 檢查是否啟用
         $enabled = isset($options['enabled']) ? $options['enabled'] : true;
         if (!$enabled) {
+            return;
+        }
+        
+        // 取得允許顯示的設備類型
+        $display_devices = isset($options['display_devices']) && is_array($options['display_devices']) 
+            ? $options['display_devices'] 
+            : array('mobile');
+        
+        // 檢查是否應該顯示廣告（根據設備類型）
+        if (!D7_Floating_Ad_Utils::should_display_ad($display_devices)) {
             return;
         }
         

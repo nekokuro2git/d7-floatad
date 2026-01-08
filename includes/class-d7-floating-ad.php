@@ -16,7 +16,7 @@ class D7_Floating_Ad {
     /**
      * 外掛版本
      */
-    const VERSION = '1.1.0';
+    const VERSION = '1.3.0';
     
     /**
      * 外掛實例
@@ -107,10 +107,28 @@ class D7_Floating_Ad {
      */
     public function frontend_scripts() {
         $options = get_option($this->option_name);
+        
+        // 檢查是否啟用
+        $enabled = isset($options['enabled']) ? $options['enabled'] : true;
+        if (!$enabled) {
+            return;
+        }
+        
+        // 取得允許顯示的設備類型
+        $display_devices = isset($options['display_devices']) && is_array($options['display_devices']) 
+            ? $options['display_devices'] 
+            : array('mobile');
+        
+        // 檢查是否應該顯示廣告（根據設備類型）
+        require_once plugin_dir_path(__FILE__) . 'class-d7-floating-ad-utils.php';
+        if (!D7_Floating_Ad_Utils::should_display_ad($display_devices)) {
+            return;
+        }
+        
         $ad_type = isset($options['ad_type']) ? $options['ad_type'] : 'image';
 
         // 如果選擇的是 Lottie 動畫，則在前端載入 Lottie 播放器
-        if (wp_is_mobile() && $ad_type === 'lottie') {
+        if ($ad_type === 'lottie') {
             wp_enqueue_script(
                 'lottie-player',
                 'https://cdn.jsdelivr.net/npm/lottie-web@5.11.0/build/player/lottie.min.js',
@@ -155,15 +173,11 @@ class D7_Floating_Ad {
      * 啟用外掛時的處理
      */
     public static function activate() {
-        // 設定預設選項
-        $default_options = array(
-            'enabled' => true,
-            'ad_type' => 'image',
-            'ad_width' => 150,
-            'ad_height' => 150,
-            'position_x' => 'right: 15px;',
-            'position_y' => 'bottom: 15px;'
-        );
+        // 載入工具類別以使用預設設定
+        require_once plugin_dir_path(__FILE__) . 'class-d7-floating-ad-utils.php';
+        
+        // 使用工具類別的預設設定
+        $default_options = D7_Floating_Ad_Utils::get_default_settings();
         
         add_option('d7news_floating_ad_settings', $default_options);
     }

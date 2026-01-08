@@ -75,6 +75,10 @@ class D7_Floating_Ad_Admin {
                 'title' => '啟用浮動廣告',
                 'callback' => 'render_enabled_field'
             ),
+            'display_devices' => array(
+                'title' => '顯示設備',
+                'callback' => 'render_display_devices_field'
+            ),
             'ad_type' => array(
                 'title' => '內容類型',
                 'callback' => 'render_ad_type_field'
@@ -124,7 +128,7 @@ class D7_Floating_Ad_Admin {
      * 渲染區段描述
      */
     public function render_section_description() {
-        echo '<p>設定浮動廣告的顯示內容、位置和樣式。廣告只會在行動裝置上顯示。</p>';
+        echo '<p>設定浮動廣告的顯示內容、位置和樣式。可以選擇在行動裝置、平板或桌機上顯示廣告。</p>';
     }
     
     /**
@@ -139,6 +143,36 @@ class D7_Floating_Ad_Admin {
             啟用浮動廣告功能
         </label>
         <p class="description">取消勾選可暫時停用浮動廣告，而不需要刪除設定。</p>
+        <?php
+    }
+    
+    /**
+     * 渲染顯示設備欄位
+     */
+    public function render_display_devices_field() {
+        $options = get_option($this->option_name);
+        $display_devices = isset($options['display_devices']) && is_array($options['display_devices']) 
+            ? $options['display_devices'] 
+            : array('mobile');
+        
+        $devices = array(
+            'mobile' => '行動裝置（手機）',
+            'tablet' => '平板裝置',
+            'desktop' => '桌機'
+        );
+        ?>
+        <fieldset>
+            <?php foreach ($devices as $device_key => $device_label): ?>
+                <label style="display: block; margin-bottom: 8px;">
+                    <input type="checkbox" 
+                           name="<?php echo $this->option_name; ?>[display_devices][]" 
+                           value="<?php echo esc_attr($device_key); ?>" 
+                           <?php checked(in_array($device_key, $display_devices), true); ?> />
+                    <?php echo esc_html($device_label); ?>
+                </label>
+            <?php endforeach; ?>
+        </fieldset>
+        <p class="description">選擇要在哪些設備上顯示浮動廣告。可以同時選擇多個設備類型。</p>
         <?php
     }
     

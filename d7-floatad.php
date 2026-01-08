@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       Dubai7 浮動廣告
- * Description:       在行動裝置上顯示可開關的浮動圖片、文字、動態 SVG 或 Lottie 動畫。
- * Version:           1.2.0
+ * Description:       顯示可開關的浮動圖片、文字、動態 SVG 或 Lottie 動畫。支援選擇在行動裝置、平板或桌機上顯示。
+ * Version:           1.3.0
  * Author:            Hedula
  * Author Website:    https://hedula.com 
  * Text Domain:       d7-floating-ad
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 }
 
 // 定義外掛常數
-define('D7_FLOATING_AD_VERSION', '1.2.0');
+define('D7_FLOATING_AD_VERSION', '1.3.0');
 define('D7_FLOATING_AD_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('D7_FLOATING_AD_PLUGIN_URL', plugin_dir_url(__FILE__));
 
